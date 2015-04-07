@@ -1,15 +1,15 @@
 'use strict';
 
-describe('Controller: HomeCtrl', function () {
+describe('Controller: DashboardCtrl', function () {
 
   beforeEach(module('timetrack'));
 
-  var HomeCtrl,
+  var DashboardCtrl,
     scope;
 
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    HomeCtrl = $controller('HomeCtrl', {
+    DashboardCtrl = $controller('DashboardCtrl', {
       $scope: scope
     });
   }));

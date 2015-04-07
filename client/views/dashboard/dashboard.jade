@@ -1,0 +1,15 @@
+.container
+  .row
+    .col-md-12
+      h2 Timetrack
+  .row
+    form(ng-submit="addTask()")
+      .form-group.col-md-6
+        input.form-control(name="task", type="text", placeholder="Enter task", required, ng-model="task.description")
+      .form-group.col-md-2
+        button.btn.btn-primary Add
+  .row
+    .col-md-6
+      ul.list-group
+        li.list-group-item.clearfix(ng-repeat="task in tasks") {{ task.description }}
+          span.btn.btn-xs.btn-danger.glyphicon.glyphicon-trash.pull-right(ng-click="removeTask(task)")
