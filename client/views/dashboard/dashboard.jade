@@ -11,5 +11,16 @@
   .row
     .col-md-6
       ul.list-group
-        li.list-group-item.clearfix(ng-repeat="task in tasks") {{ task.description }}
-          span.btn.btn-xs.btn-danger.glyphicon.glyphicon-trash.pull-right(ng-click="removeTask(task)")
+        li.list-group-item.clearfix(ng-repeat="task in tasks track by $index") {{ task.description }}
+          .btn-group.btn-group-xs.pull-right
+            span.btn.btn-xs.btn-primary.glyphicon.glyphicon-play(ng-if="!task.isTracking" ng-click="startTracking(task)")
+            span.btn.btn-xs.btn-primary.glyphicon.glyphicon-pause(ng-if="task.isTracking" ng-click="pauseTracking(task)")
+            span.btn.btn-xs.btn-danger.glyphicon.glyphicon-trash(ng-click="removeTask(task)")
+
+  .row
+    .col-md-6
+      .well
+        | Total&nbsp;
+        span(ng-if="isMinutes") minutes: {{ total }}
+        span(ng-if="!isMinutes") hours: {{ total }}
+
