@@ -84,7 +84,7 @@ angular.module('timetrack')
         if(endTime) {
           minutes += moment(endTime).diff(moment(startTime), 'minutes');
 
-          $scope.total = Math.round($scope.total / 60);
+          $scope.total = Math.round(minutes / 60);
 
           if($scope.total == 0) {
             $scope.total = minutes;
