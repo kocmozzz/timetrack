@@ -18,7 +18,7 @@
             span.btn.btn-xs.btn-danger.glyphicon.glyphicon-trash(ng-click="removeTask(task)")
           |{{ task.description }}
           div
-            .label.label-success {{ getTimeDuration(task.startTime, task.endTime) }}
+            .label.label-success {{ getTimeDuration(task) }}
 
 
   .row

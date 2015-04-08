@@ -5,7 +5,8 @@ angular.module('timetrack')
     $scope.task = {
       description: "",
       startTime: 0,
-      endTime: 0,
+      trackTime: 0,
+      logging: [],
       isTracking: false
     };
 
@@ -62,8 +63,22 @@ angular.module('timetrack')
     *
     * */
     $scope.pauseTracking = function(task) {
-      task.endTime = moment().format("x");
+      var log = {
+        end: moment().format("x")
+      };
+
+      if (!task.trackTime) {
+        log.start = task.startTime;
+      } else {
+        log.start = task.trackTime;
+      }
+
+      task.logging.push(log);
+
+      task.trackTime = log.end;
       task.isTracking = false;
+
+      console.log(task);
 
       storage.put(task, $scope.tasks.indexOf(task))
     };
@@ -71,15 +86,19 @@ angular.module('timetrack')
     /*
     * Calculate time duration.
     * */
-    $scope.getTimeDuration = function(start, end) {
-      start = parseInt(start, 10);
-      end = parseInt(end, 10);
+    $scope.getTimeDuration = function(task) {
+      var ms = 0;
 
-      if (end){
-        return moment.duration(moment(end).diff(moment(start))).humanize();
-      }
+      angular.forEach(task.logging, function(log) {
+        var endTime = parseInt(log.end, 10),
+          startTime = parseInt(log.start, 10);
 
-      return 0;
+        if(endTime) {
+          ms += moment(endTime).diff(moment(startTime));
+        }
+      });
+
+      return moment.duration(ms).humanize();
     };
 
     /*
@@ -92,12 +111,16 @@ angular.module('timetrack')
       $scope.total = 0;
 
       angular.forEach($scope.tasks, function(task) {
-        var endTime = parseInt(task.endTime, 10),
-            startTime = parseInt(task.startTime, 10);
 
-        if(endTime) {
-          ms += moment(endTime).diff(moment(startTime));
-        }
+        angular.forEach(task.logging, function(log) {
+          var endTime = parseInt(log.end, 10),
+            startTime = parseInt(log.start, 10);
+
+          if(endTime) {
+            ms += moment(endTime).diff(moment(startTime));
+          }
+        });
+
       });
 
       return moment.duration(ms).humanize();
