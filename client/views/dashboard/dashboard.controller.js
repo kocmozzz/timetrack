@@ -78,15 +78,10 @@ angular.module('timetrack')
       task.trackTime = log.end;
       task.isTracking = false;
 
-      console.log(task);
-
       storage.put(task, $scope.tasks.indexOf(task))
     };
 
-    /*
-    * Calculate time duration.
-    * */
-    $scope.getTimeDuration = function(task) {
+    function calculateTotalLoggingTime(task) {
       var ms = 0;
 
       angular.forEach(task.logging, function(log) {
@@ -98,6 +93,19 @@ angular.module('timetrack')
         }
       });
 
+      return ms;
+    }
+
+    /*
+    * Calculate time duration.
+    * */
+    $scope.getTimeDuration = function(task) {
+      var ms = calculateTotalLoggingTime(task);
+
+      if (!ms) {
+        return 0;
+      }
+
       return moment.duration(ms).humanize();
     };
 
@@ -108,19 +116,8 @@ angular.module('timetrack')
     $scope.countTotalTime = function() {
       var ms = 0;
 
-      $scope.total = 0;
-
       angular.forEach($scope.tasks, function(task) {
-
-        angular.forEach(task.logging, function(log) {
-          var endTime = parseInt(log.end, 10),
-            startTime = parseInt(log.start, 10);
-
-          if(endTime) {
-            ms += moment(endTime).diff(moment(startTime));
-          }
-        });
-
+        ms += calculateTotalLoggingTime(task);
       });
 
       return moment.duration(ms).humanize();
