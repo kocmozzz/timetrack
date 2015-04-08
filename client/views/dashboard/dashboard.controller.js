@@ -19,7 +19,7 @@ angular.module('timetrack')
     });
 
     $scope.$watch('tasks', function() {
-      $scope.total = $scope.countTotalHours();
+      $scope.total = $scope.countTotalTime();
     }, true);
 
     /*
@@ -69,11 +69,25 @@ angular.module('timetrack')
     };
 
     /*
+    * Calculate time duration.
+    * */
+    $scope.getTimeDuration = function(start, end) {
+      start = parseInt(start, 10);
+      end = parseInt(end, 10);
+
+      if (end){
+        return moment.duration(moment(end).diff(moment(start))).humanize();
+      }
+
+      return 0;
+    };
+
+    /*
     * Count total project time spend.
     *
     * */
-    $scope.countTotalHours = function() {
-      var minutes = 0;
+    $scope.countTotalTime = function() {
+      var ms = 0;
 
       $scope.total = 0;
 
@@ -82,19 +96,11 @@ angular.module('timetrack')
             startTime = parseInt(task.startTime, 10);
 
         if(endTime) {
-          minutes += moment(endTime).diff(moment(startTime), 'minutes');
-
-          $scope.total = Math.round(minutes / 60);
-
-          if($scope.total == 0) {
-            $scope.total = minutes;
-            $scope.isMinutes = true;
-          }
+          ms += moment(endTime).diff(moment(startTime));
         }
-
       });
 
-      return $scope.total;
+      return moment.duration(ms).humanize();
     }
 
   });
