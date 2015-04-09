@@ -18,10 +18,10 @@
             span.btn.btn-xs.btn-danger.glyphicon.glyphicon-trash(ng-click="removeTask(task)")
           |{{ task.description }}
           div
-            .label.label-success {{ getTimeDuration(task) }}
+            .label.label-success {{ getTimeDuration(task) }} hours
 
     .col-md-6
       .well
         i.glyphicon.glyphicon-time
-        |&nbsp;Total time: {{ total }}
+        |&nbsp;Total time: {{ total }} hours.
 

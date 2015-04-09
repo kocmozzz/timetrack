@@ -96,6 +96,10 @@ angular.module('timetrack')
       return ms;
     }
 
+    function formatInHours(ms) {
+      return Math.round(moment.duration(ms).asHours())
+    }
+
     /*
     * Calculate time duration.
     * */
@@ -106,7 +110,7 @@ angular.module('timetrack')
         return 0;
       }
 
-      return moment.duration(ms).humanize();
+      return formatInHours(ms);
     };
 
     /*
@@ -120,7 +124,7 @@ angular.module('timetrack')
         ms += calculateTotalLoggingTime(task);
       });
 
-      return moment.duration(ms).humanize();
+      return formatInHours(ms);
     }
 
   });
