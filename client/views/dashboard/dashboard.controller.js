@@ -53,6 +53,12 @@ angular.module('timetrack')
         task.startTime = moment().format("x");
       }
 
+      var log = {
+        start: moment().format("x")
+      };
+
+      task.logging.push(log);
+
       task.isTracking = true;
 
       storage.put(task, $scope.tasks.indexOf(task))
@@ -63,19 +69,9 @@ angular.module('timetrack')
     *
     * */
     $scope.pauseTracking = function(task) {
-      var log = {
-        end: moment().format("x")
-      };
+      task.logging[task.logging.length - 1].end = moment().format("x");
 
-      if (!task.trackTime) {
-        log.start = task.startTime;
-      } else {
-        log.start = task.trackTime;
-      }
-
-      task.logging.push(log);
-
-      task.trackTime = log.end;
+      task.trackTime = moment().format("x");
       task.isTracking = false;
 
       storage.put(task, $scope.tasks.indexOf(task))
